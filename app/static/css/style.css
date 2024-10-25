@@ -1,0 +1,181 @@
+/* Base styles */
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    line-height: 1.6;
+    background-color: #f8fafc;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+.description {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #4a4a4a;
+}
+
+/* Form elements */
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #1a1a1a;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.analyze-btn {
+    background-color: #2563eb;
+    color: white;
+}
+
+.analyze-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.clear-btn {
+    background-color: #e5e7eb;
+    color: #4b5563;
+}
+
+.clear-btn:hover {
+    background-color: #d1d5db;
+}
+
+/* Results section */
+#loading {
+    display: none;
+    padding: 20px;
+    text-align: center;
+    color: #4b5563;
+    background: white;
+    border-radius: 8px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#results {
+    display: none;
+    margin-top: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.result-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.result-section h3 {
+    color: #2563eb;
+    margin-bottom: 10px;
+}
+
+/* Metrics display */
+.metric {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.metric-label {
+    color: #4b5563;
+}
+
+.metric-value {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.recommendation {
+    padding: 15px;
+    border-radius: 6px;
+    margin-top: 15px;
+    background: #f0f9ff;
+    border-left: 4px solid #2563eb;
+}
+
+/* Messages */
+.error-message {
+    display: none;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 12px;
+    border-radius: 6px;
+    margin: 10px 0;
+}
+
+/* Chart container */
+#metricsChart {
+    width: 100%;
+    height: 300px;
+    margin: 20px 0;
+}
+
+/* Footer */
+.footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    color: #6b7280;
+    text-align: center;
+}
+
+/* Recommendation styles */
+.strong-invest {
+    border-color: #059669;
+    background: #ecfdf5;
+}
+
+.consider-investment {
+    border-color: #d97706;
+    background: #fffbeb;
+}
+
+.hold {
+    border-color: #dc2626;
+    background: #fef2f2;
+}

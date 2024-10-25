@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <title>Music Investment Analyzer</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f8fafc;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1a1a1a;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #4a4a4a;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a1a;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .analyze-btn {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .analyze-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .clear-btn {
+            background-color: #e5e7eb;
+            color: #4b5563;
+        }
+
+        #loading {
+            display: none;
+            padding: 20px;
+            text-align: center;
+            color: #4b5563;
+            background: white;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        #results {
+            display: none;
+            margin-top: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .result-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .result-section h3 {
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .metric-label {
+            color: #4b5563;
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .recommendation {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            background: #f0f9ff;
+            border-left: 4px solid #2563eb;
+        }
+
+        .error-message {
+            display: none;
+            color: #dc2626;
+            background: #fee2e2;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            color: #6b7280;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Music Investment Analyzer</h1>
+        <p class="description">Enter a Spotify track URL to analyze its investment potential and get detailed insights</p>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <div class="input-group">
+            <label for="spotifyUrl">Spotify Track URL</label>
+            <input 
+                type="text" 
+                id="spotifyUrl" 
+                placeholder="https://open.spotify.com/track/..."
+                value="https://open.spotify.com/track/2RrsbDAHJWqfHC1L7hp7O?si=3dac10ea4fe8434d"
+            >
+            <p class="help-text">Paste a Spotify track URL to analyze its potential success and investment metrics</p>
+        </div>
+
+        <div class="button-group">
+            <button class="btn analyze-btn" onclick="analyzeTrack()">Analyze Track</button>
+            <button class="btn clear-btn" onclick="clearResults()">Clear Results</button>
+        </div>
+
+        <div id="loading">
+            Analyzing track data and gathering insights...
+        </div>
+
+        <div id="results">
+            <div class="result-section" id="trackInfo">
+                <h3>Track Information</h3>
+                <!-- Track info will be inserted here -->
+            </div>
+
+            <div class="result-section" id="artistMetrics">
+                <h3>Artist Analytics</h3>
+                <!-- Artist metrics will be inserted here -->
+            </div>
+
+            <div class="result-section" id="investmentAnalysis">
+                <h3>Investment Analysis</h3>
+                <!-- Investment analysis will be inserted here -->
+            </div>
+
+            <div class="recommendation" id="recommendation">
+                <!-- Recommendation will be inserted here -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Powered by AI and Music Industry Analytics</p>
+        <p>© 2024 Music Investment Analyzer</p>
+    </footer>
+
+    <script>
+        async function analyzeTrack() {
+            const spotifyUrl = document.getElementById('spotifyUrl').value;
+            const loadingDiv = document.getElementById('loading');
+            const resultsDiv = document.getElementById('results');
+            const errorDiv = document.getElementById('errorMessage');
+
+            // Reset display
+            errorDiv.style.display = 'none';
+            loadingDiv.style.display = 'block';
+            resultsDiv.style.display = 'none';
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ spotify_url: spotifyUrl })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+
+                displayResults(data.results);
+                resultsDiv.style.display = 'block';
+            } catch (error) {
+                errorDiv.textContent = error.message;
+                errorDiv.style.display = 'block';
+            } finally {
+                loadingDiv.style.display = 'none';
+            }
+        }
+
+        function displayResults(results) {
+            // Display track information
+            document.getElementById('trackInfo').innerHTML = `
+                <h3>Track Information</h3>
+                <div class="metric">
+                    <span class="metric-label">Track Name</span>
+                    <span class="metric-value">${results.track_data.track_name}</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Artist</span>
+                    <span class="metric-value">${results.track_data.artist_name}</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Popularity</span>
+                    <span class="metric-value">${results.track_data.popularity}/100</span>
+                </div>
+            `;
+
+            // Display artist metrics
+            document.getElementById('artistMetrics').innerHTML = `
+                <h3>Artist Analytics</h3>
+                <div class="metric">
+                    <span class="metric-label">Growth Rate</span>
+                    <span class="metric-value">${(results.artist_metrics.growth_metrics.growth_rate * 100).toFixed(1)}%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Engagement Rate</span>
+                    <span class="metric-value">${(results.artist_metrics.social_metrics.engagement_rate * 100).toFixed(1)}%</span>
+                </div>
+            `;
+
+            // Display investment analysis
+            document.getElementById('investmentAnalysis').innerHTML = `
+                <h3>Investment Analysis</h3>
+                <div class="metric">
+                    <span class="metric-label">Success Probability</span>
+                    <span class="metric-value">${(results.prediction.success_probability * 100).toFixed(1)}%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Investment Score</span>
+                    <span class="metric-value">${(results.prediction.investment_score * 100).toFixed(1)}%</span>
+                </div>
+            `;
+
+            // Display recommendation
+            document.getElementById('recommendation').innerHTML = `
+                <h4>${results.prediction.recommendation.decision}</h4>
+                <p><strong>Confidence:</strong> ${results.prediction.recommendation.confidence}</p>
+                <p>${results.prediction.recommendation.rationale}</p>
+            `;
+        }
+
+        function clearResults() {
+            document.getElementById('spotifyUrl').value = '';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('loading').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
